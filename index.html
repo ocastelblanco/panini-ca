@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Panini</title>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/pca.min.css" />
+    <link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="css/jquery.mobile.structure-1.4.2.min.css" /> 
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<script src="js/jquery.mobile-1.4.2.min.js"></script>
+    <style type="text/css">
+		.ya {
+		    text-decoration: line-through;
+		    height: 2.04em;
+            padding-top: 1.1em;
+            text-align: center;
+		}
+		#rejilla .ui-flipswitch {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        #encabezado img {
+            float: left;
+            height: 40px;
+            width: auto;
+            padding: 5px;
+        }
+        #encabezado h1 {
+            margin: 0 10%;
+        }
+        .ui-checkbox {
+            margin: 0;
+        }
+        .ui-btn {
+            text-overflow: initial;
+        }
+	</style>
+</head>
+<body>
+
+<div data-role="page" id="inicio">
+	<div id="encabezado" data-role="header" data-position="fixed">
+	   <img src="img/copa.png">
+		<h1>Panini Castelblanco Álvarez</h1>
+	</div><!-- /header -->
+	<div role="main" class="ui-content">
+		<div id="rejilla" class="ui-grid-c">
+		</div><!-- /.ui-grid-d -->
+	</div><!-- /content -->
+	<div data-role="footer" data-position="fixed">
+		<div data-role="navbar">
+            <ul>
+                <li><a href="#" id="grabar" class="ui-icon-check ui-btn-icon-top">Grabar</a></li>
+                <li><a href="#" id="actualizar" class="ui-icon-refresh ui-btn-icon-top">Actualizar</a></li>
+            </ul>
+        </div><!-- /navbar -->
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<script type="text/javascript">
+    $('#inicio').on('pagebeforecreate', function(event){
+	    cargaLaminas();
+	});
+	$('#inicio').on('pagecreate', function(event, ui){
+		$('#grabar').on('click', function(){
+		    $.mobile.loading("show", {
+		        text: "Grabando información",
+                textVisible: true
+            });
+            var laminasElegidas = {}, cont = 0;
+		    $('#rejilla input:checked').each(function() {
+		        console.log($(this).attr('name'));
+		        laminasElegidas['p'+cont] = $(this).attr('name').substr(1);
+		        cont++;
+		    });
+            //$.getJSON('http://www.olivercastelblanco.com/panini/io.php', function(respuesta){
+		    $.getJSON('io.php', laminasElegidas, function(respuesta){
+		        if(respuesta.resultado = "exito") {
+                    $.mobile.loading("hide");
+                    $('#grabar').removeClass('ui-btn-active');
+                    cargaLaminas();
+		        }
+		    });
+		});
+        $('#actualizar').on('click', function(){
+            cargaLaminas();
+        });
+    });
+	function cargaLaminas() {
+        $.mobile.loading("show", {
+            text: "Actualizando información",
+            textVisible: true
+        });
+	    var celdas = ['ui-block-a','ui-block-b','ui-block-c','ui-block-d'];
+		//$.getJSON('http://www.olivercastelblanco.com/panini/panini.json', function(laminas){
+		$.getJSON('panini.json', function(laminas){
+		    $('#inicio .ui-content #rejilla').html('');
+			for (var i=1;i<640;i++) {
+			    var celda = celdas[Math.round((((i-1)/celdas.length)%1)*celdas.length)];
+			    $('#inicio .ui-content #rejilla').append('<div class="'+celda+'"></div>');
+				if (laminas.lastIndexOf(i) > -1) {
+					$('#inicio .ui-content #rejilla div:last').html('<div class="ui-bar ui-bar-a ya">'+i+'</div>');
+				} else {
+					//$('#inicio .ui-content #rejilla div:last').html('<div class="ui-bar ui-bar-a"><input type="checkbox" data-role="flipswitch" name="p'+i+'" id="p'+i+'" data-on-text="'+i+'" data-off-text="'+i+'" data-wrapper-class="custom-label-flipswitch"></div>');
+					$('#inicio .ui-content #rejilla div:last').html('<div class="ui-bar ui-bar-a"><label><input type="checkbox" name="p'+i+'">'+i+'</label></div>');
+				}
+			}
+			$('#inicio .ui-content').enhanceWithin();
+            $.mobile.loading("hide");
+            $('#actualizar').removeClass('ui-btn-active');
+		});
+	}
+</script>
+
+</body>
+</html>
