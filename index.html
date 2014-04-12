@@ -71,12 +71,11 @@
             });
             var laminasElegidas = {}, cont = 0;
 		    $('#rejilla input:checked').each(function() {
-		        console.log($(this).attr('name'));
 		        laminasElegidas['p'+cont] = $(this).attr('name').substr(1);
 		        cont++;
 		    });
-            //$.getJSON('http://www.olivercastelblanco.com/panini/io.php', function(respuesta){
-		    $.getJSON('io.php', laminasElegidas, function(respuesta){
+            $.getJSON('http://www.olivercastelblanco.com/panini/grabar.php?callback=?', laminasElegidas, function(respuesta){
+		    //$.getJSON('io.php', laminasElegidas, function(respuesta){
 		        if(respuesta.resultado = "exito") {
                     $.mobile.loading("hide");
                     $('#grabar').removeClass('ui-btn-active');
@@ -94,8 +93,8 @@
             textVisible: true
         });
 	    var celdas = ['ui-block-a','ui-block-b','ui-block-c','ui-block-d'];
-		//$.getJSON('http://www.olivercastelblanco.com/panini/panini.json', function(laminas){
-		$.getJSON('panini.json', function(laminas){
+		$.getJSON('http://www.olivercastelblanco.com/panini/cargar.php?callback=?', function(laminas){
+		//$.getJSON('panini.json', function(laminas){
 		    $('#inicio .ui-content #rejilla').html('');
 			for (var i=1;i<640;i++) {
 			    var celda = celdas[Math.round((((i-1)/celdas.length)%1)*celdas.length)];
