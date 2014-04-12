@@ -3,7 +3,7 @@
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "com.olivercastelblanco.panini"
         versionCode = "11" 
-        version     = "1.0.1" >
+        version     = "1.0.2" >
 	<name>PCA</name>
     <description>
         Panini Castelblanco Álvarez: una forma automatizada de controlar las monitas del álbum.
