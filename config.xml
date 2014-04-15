@@ -2,8 +2,8 @@
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "com.olivercastelblanco.panini"
-        versionCode = "11" 
-        version     = "1.0.2" >
+        versionCode = "13" 
+        version     = "1.0.3" >
 	<name>PCA</name>
     <description>
         Panini Castelblanco Álvarez: una forma automatizada de controlar las monitas del álbum.
