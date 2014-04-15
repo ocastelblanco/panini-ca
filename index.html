@@ -16,13 +16,19 @@
             display: block;
         }
         #encabezado img {
-            float: left;
             height: 40px;
             width: auto;
-            padding: 5px;
+            position: relative;
+            left: -7px;
         }
         #encabezado h1 {
             margin: 0 10%;
+        }
+        #infoPanel img {
+            height: 60px;
+            width: auto;
+            padding: 10px;
+            float: left;
         }
         .ui-checkbox {
             margin: 0;
@@ -43,17 +49,43 @@
             padding-top: 0.75em;
             text-align: center;
 		}
+		#cerrarPanel {
+		    background-color: transparent;
+            margin: 0;
+            padding-top: 0;
+            border: 0;
+            top: 2px;
+            left: -3px;
+		}
+        #cerrarPanel:after {
+            margin-top: -14px;
+            background-color: transparent;
+        }
+        #encabezado {
+            overflow: hidden;
+        }
+        #rejilla img {
+            width: 100%;
+            height: auto;
+        }
 	</style>
 </head>
 <body>
 
 <div data-role="page" id="inicio">
+    <div data-role="panel" id="infoPanel">
+       <img src="img/copa.png">
+       <h3>Panini Castelblanco Álvarez</h3>
+       <h4>Láminas en el álbum: <span></span></h4>
+       <h4>Láminas faltantes: <span></span></h4>
+    </div><!-- /panel -->
 	<div id="encabezado" data-role="header" data-position="fixed">
-	   <img src="img/copa.png">
+	    <a id="cerrarPanel" href="#infoPanel" class="ui-btn ui-icon-bars ui-btn-icon-left"><img src="img/copa.png"></a>
 		<h1>Panini Castelblanco Álvarez</h1>
 	</div><!-- /header -->
 	<div role="main" class="ui-content">
 		<div id="rejilla" class="ui-grid-c">
+		    <img src="splash.png">
 		</div><!-- /.ui-grid-d -->
 	</div><!-- /content -->
 	<div data-role="footer" data-position="fixed">
@@ -102,17 +134,23 @@
 	    var celdas = ['ui-block-a','ui-block-b','ui-block-c','ui-block-d'];
 		$.getJSON('http://www.olivercastelblanco.com/panini/cargar.php?callback=?', function(laminas){
 		//$.getJSON('panini.json', function(laminas){
+			var pegadas = 0;
+			var faltantes = 0;
 		    $('#inicio .ui-content #rejilla').html('');
 			for (var i=1;i<640;i++) {
 			    var celda = celdas[Math.round((((i-1)/celdas.length)%1)*celdas.length)];
 			    $('#inicio .ui-content #rejilla').append('<div class="'+celda+'"></div>');
 				if (laminas.lastIndexOf(i) > -1) {
+				    pegadas++;
 					$('#inicio .ui-content #rejilla div:last').html('<div class="ui-bar ui-bar-a ya">'+i+'</div>');
 				} else {
-					//$('#inicio .ui-content #rejilla div:last').html('<div class="ui-bar ui-bar-a"><input type="checkbox" data-role="flipswitch" name="p'+i+'" id="p'+i+'" data-on-text="'+i+'" data-off-text="'+i+'" data-wrapper-class="custom-label-flipswitch"></div>');
+				    faltantes++;
 					$('#inicio .ui-content #rejilla div:last').html('<div class="ui-bar ui-bar-a"><label><input type="checkbox" name="p'+i+'">'+i+'</label></div>');
 				}
 			}
+			$('#infoPanel h4:first span').html(pegadas);
+            $('#infoPanel h4:last span').html(faltantes);
+            $('#infoPanel').trigger('updatelayout');
 			$('#inicio .ui-content').enhanceWithin();
             $.mobile.loading("hide");
             $('#actualizar').removeClass('ui-btn-active');
