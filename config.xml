@@ -12,6 +12,7 @@
         Oliver Castelblanco M.
     </author>
     <gap:platform name="android" />
+    <preference name="phonegap-version" value="3.5.0" />
     <preference name="splash-screen-duration" value="7000"/>
     <icon src="icon.png" />
     <gap:splash src="splash.png" />
